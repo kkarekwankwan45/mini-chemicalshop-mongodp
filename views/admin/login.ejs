@@ -1,0 +1,50 @@
+<%- include('../partials/header') %>
+
+<div class="shop-topbar">
+  <div class="breadcrumb">
+    <a href="/">HOME</a> / <span>ADMIN LOGIN</span>
+  </div>
+</div>
+
+<div class="auth-container">
+  <div class="auth-card">
+    <h1>เข้าสู่ระบบผู้ดูแลร้าน</h1>
+    <p class="auth-subtitle">Mini Chemical Shop • ระบบจัดการสินค้าและใบเสนอราคา</p>
+
+    <% if (error) { %>
+      <p class="error-banner"><%= error %></p>
+    <% } %>
+
+    <form action="/admin/login" method="POST" class="auth-form">
+      <label>
+        อีเมลผู้ดูแลระบบ (Email)
+        <input 
+          type="email" 
+          name="email" 
+          required 
+          autocomplete="email" 
+          placeholder="admin@example.com" 
+        />
+      </label>
+
+      <label>
+        รหัสผ่าน (Password)
+        <input 
+          type="password" 
+          name="password" 
+          required 
+          autocomplete="current-password" 
+          placeholder="••••••••" 
+        />
+      </label>
+
+      <button type="submit" class="btn-primary">เข้าสู่ระบบ</button>
+    </form>
+
+    <div class="auth-footer">
+      <a href="/">&larr; กลับไปหน้าหลักร้านค้า</a>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

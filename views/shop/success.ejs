@@ -1,0 +1,85 @@
+<%- include('../partials/header') %>
+
+<div class="shop-topbar">
+  <div class="breadcrumb">
+    <a href="/">HOME</a> / <span>ORDER COMPLETE</span>
+  </div>
+</div>
+
+<div class="success-container">
+  <div class="success-card">
+    <!-- แยกหัวข้อและคำอธิบายตามสถานะออเดอร์ (สั่งซื้อปกติ vs ขอใบเสนอราคา) -->
+    <% const isQuote = order.status === 'quote_requested'; %>
+
+    <h1><%= isQuote ? 'ส่งคำขอใบเสนอราคาสำเร็จ' : 'บันทึกคำสั่งซื้อสำเร็จ' %></h1>
+    <p class="success-subtitle">
+      <%= isQuote 
+        ? 'ระบบได้รับรายการขอใบเสนอราคาของคุณแล้ว เจ้าหน้าที่จะตรวจสอบราคาและติดต่อกลับโดยเร็วที่สุด' 
+        : 'ขอบคุณที่ใช้บริการ ระบบได้รับรายการสั่งซื้อของคุณเรียบร้อยแล้ว (ยังไม่มีการชำระเงินจริง)' %>
+    </p>
+
+    <!-- กล่องแสดงเลขอ้างอิง -->
+    <div class="order-ref-box">
+      <span>เลขที่อ้างอิง (Order / Quote No.):</span>
+      <strong><code><%= order.orderNumber || order.id %></code></strong>
+      <span class="status-badge <%= isQuote ? 'badge-quote' : 'badge-pending' %>">
+        <%= isQuote ? 'รอใบเสนอราคา' : 'รอตรวจสอบ / ชำระเงิน' %>
+      </span>
+    </div>
+
+    <!-- รายละเอียดผู้สั่งซื้อ / หน่วยงาน -->
+    <div class="order-details-section">
+      <h3>ข้อมูลผู้ติดต่อและจัดส่ง</h3>
+      <p><strong>ชื่อผู้ติดต่อ:</strong> <%= order.customerName %></p>
+      <% if (order.organization) { %>
+        <p><strong>บริษัท / ห้องปฏิบัติการ:</strong> <%= order.organization %></p>
+      <% } %>
+      <p><strong>เบอร์โทรศัพท์:</strong> <%= order.phone %></p>
+      <% if (order.email) { %>
+        <p><strong>อีเมล:</strong> <%= order.email %></p>
+      <% } %>
+      <% if (order.shippingAddress) { %>
+        <p><strong>ที่อยู่จัดส่ง:</strong> <%= order.shippingAddress %></p>
+      <% } %>
+      <% if (order.note) { %>
+        <p><strong>หมายเหตุ:</strong> <%= order.note %></p>
+      <% } %>
+    </div>
+
+    <!-- สรุปรายการสินค้าที่สั่ง -->
+    <div class="order-items-section">
+      <h3>รายการสินค้า</h3>
+      <ul class="summary-item-list">
+        <% order.items.forEach(item => { %>
+          <li>
+            <div class="item-name-col">
+              <span><%= item.name %></span>
+              <% if (item.sku) { %><small>(SKU: <%= item.sku %>)</small><% } %>
+              <strong>× <%= item.quantity %></strong>
+            </div>
+            <div class="item-price-col">
+              <% if (item.unitPrice !== null && item.unitPrice !== undefined) { %>
+                ฿<%= (item.unitPrice * item.quantity).toLocaleString('th-TH', { minimumFractionDigits: 2 }) %>
+              <% } else { %>
+                <span class="text-muted">รอประเมินราคา</span>
+              <% } %>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+
+      <div class="order-total-row">
+        <strong>ยอดรวมเบื้องต้น:</strong>
+        <strong class="total-amount">
+          ฿<%= order.total.toLocaleString('th-TH', { minimumFractionDigits: 2 }) %>
+        </strong>
+      </div>
+    </div>
+
+    <div class="success-actions">
+      <a href="/" class="btn-primary">กลับไปหน้าร้านค้า</a>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

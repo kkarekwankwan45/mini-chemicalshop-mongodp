@@ -1,0 +1,132 @@
+<%- include('../partials/header') %>
+
+<%
+  const statusLabels = {
+    quote_requested: 'รอใบเสนอราคา',
+    pending: 'รอตรวจสอบ / ชำระเงิน',
+    confirmed: 'ยืนยันออเดอร์',
+    shipped: 'จัดส่งแล้ว',
+    completed: 'เสร็จสมบูรณ์',
+    cancelled: 'ยกเลิก'
+  };
+%>
+
+<div class="shop-topbar">
+  <div class="breadcrumb">
+    <a href="/">HOME</a> / <a href="/admin">ADMIN</a> / <span>ORDERS &amp; QUOTATIONS</span>
+  </div>
+</div>
+
+<div class="admin-container">
+  <div class="admin-header-row">
+    <h1>รายการคำสั่งซื้อและขอใบเสนอราคา</h1>
+    <a href="/admin" class="btn-outline">&larr; กลับหน้าจัดการสินค้า</a>
+  </div>
+
+  <!-- แถบตัวกรองตามสถานะ (เชื่อมต่อกับ req.query.status ใน routes/admin.js) -->
+  <form method="GET" action="/admin/orders" class="admin-filter-bar">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">ทุกสถานะ (All Orders)</option>
+      <% Object.entries(statusLabels).forEach(([key, label]) => { %>
+        <option value="<%= key %>" <%= selectedStatus === key ? 'selected' : '' %>>
+          <%= label %>
+        </option>
+      <% }) %>
+    </select>
+    <% if (selectedStatus) { %>
+      <a href="/admin/orders" class="btn-clear">ล้างตัวกรอง</a>
+    <% } %>
+  </form>
+
+  <!-- รายการคำสั่งซื้อ -->
+  <% if (orders.length > 0) { %>
+    <div class="orders-grid">
+      <% orders.forEach(o => { %>
+        <% const isQuote = o.status === 'quote_requested'; %>
+        <article class="order-card <%= isQuote ? 'order-quote' : '' %>">
+          
+          <!-- ส่วนหัวการ์ด: เลขอ้างอิง + วันที่ + สถานะปัจจุบัน -->
+          <div class="order-card-header">
+            <div>
+              <strong>เลขที่อ้างอิง: <code><%= o.orderNumber || o.id %></code></strong>
+              <br />
+              <small class="text-muted">
+                วันที่: <%= new Date(o.createdAt).toLocaleString('th-TH') %>
+              </small>
+            </div>
+            <span class="status-badge status-<%= o.status %>">
+              <%= statusLabels[o.status] || o.status %>
+            </span>
+          </div>
+
+          <!-- ข้อมูลลูกค้า / ห้องปฏิบัติการ -->
+          <div class="order-customer-info">
+            <p>
+              <strong>ผู้ติดต่อ:</strong> <%= o.customerName %> | 
+              <strong>โทร:</strong> <%= o.phone %>
+              <% if (o.email) { %> | <strong>อีเมล:</strong> <%= o.email %><% } %>
+            </p>
+            <% if (o.organization) { %>
+              <p><strong>บริษัท / ห้องปฏิบัติการ:</strong> <%= o.organization %></p>
+            <% } %>
+            <% if (o.shippingAddress) { %>
+              <p><strong>ที่อยู่จัดส่ง:</strong> <%= o.shippingAddress %></p>
+            <% } %>
+            <% if (o.note) { %>
+              <p class="order-note"><strong>หมายเหตุ:</strong> <%= o.note %></p>
+            <% } %>
+          </div>
+
+          <!-- รายการสารเคมีและอุปกรณ์ที่สั่ง -->
+          <ul class="order-item-list">
+            <% o.items.forEach(i => { %>
+              <li>
+                <span>
+                  <%= i.name %>
+                  <% if (i.sku) { %><small class="text-muted">(SKU: <%= i.sku %>)</small><% } %>
+                  <strong>× <%= i.quantity %></strong>
+                </span>
+                <span>
+                  <% if (i.unitPrice !== null && i.unitPrice !== undefined) { %>
+                    ฿<%= (i.unitPrice * i.quantity).toLocaleString('th-TH', { minimumFractionDigits: 2 }) %>
+                  <% } else { %>
+                    <span class="quote-badge">รอประเมินราคา</span>
+                  <% } %>
+                </span>
+              </li>
+            <% }) %>
+          </ul>
+
+          <!-- ส่วนท้ายการ์ด: ยอดรวม + ฟอร์มอัปเดตสถานะ -->
+          <div class="order-card-footer">
+            <div class="order-total">
+              ยอดรวมเบื้องต้น: 
+              <strong>฿<%= o.total.toLocaleString('th-TH', { minimumFractionDigits: 2 }) %></strong>
+            </div>
+
+            <form method="POST" action="/admin/orders/<%= o.id %>/status" class="status-update-form">
+              <label>
+                อัปเดตสถานะ:
+                <select name="status">
+                  <% Object.entries(statusLabels).forEach(([key, label]) => { %>
+                    <option value="<%= key %>" <%= o.status === key ? 'selected' : '' %>>
+                      <%= label %>
+                    </option>
+                  <% }) %>
+                </select>
+              </label>
+              <button type="submit" class="btn-primary">บันทึก</button>
+            </form>
+          </div>
+
+        </article>
+      <% }) %>
+    </div>
+  <% } else { %>
+    <div class="empty-state">
+      <p>ไม่พบรายการคำสั่งซื้อหรือคำขอใบเสนอราคา</p>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

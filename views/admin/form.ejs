@@ -1,0 +1,144 @@
+<%- include('../partials/header') %><h1><%= product && product._id ? 'แก้ไขสินค้า' : 'เพิ่มสินค้า' %></h1><% if(error){ %><p class="error"><%= error %></p><% } %>
+<%- include('../partials/header') %>
+
+<div class="shop-topbar">
+  <div class="breadcrumb">
+    <a href="/">HOME</a> / <a href="/admin">ADMIN</a> /
+    <span><%= product && product._id ? 'EDIT PRODUCT' : 'NEW PRODUCT' %></span>
+  </div>
+</div>
+
+<div class="admin-form-container">
+  <div class="admin-header-row">
+    <h1><%= product && product._id ? 'แก้ไขข้อมูลสินค้า' : 'เพิ่มสินค้าใหม่' %></h1>
+    <a href="/admin" class="btn-outline">&larr; กลับหน้ารายการสินค้า</a>
+  </div>
+
+  <% if (error) { %>
+    <p class="error-banner"><%= error %></p>
+  <% } %>
+
+  <form
+    class="admin-product-form"
+    method="POST"
+    action="<%= product && product._id ? '/admin/products/' + product._id + '/edit' : '/admin/products' %>"
+  >
+    <!-- ชื่อสินค้าและรหัส SKU -->
+    <div class="form-row">
+      <label class="flex-2">
+        ชื่อสารเคมี / อุปกรณ์ *
+        <input
+          type="text"
+          name="name"
+          required
+          maxlength="200"
+          value="<%= product?.name || '' %>"
+          placeholder="เช่น n-Propyl Alcohol, HPLC, 2.5 L, Fisher Chemical™"
+        />
+      </label>
+
+      <label class="flex-1">
+        รหัสสินค้า (SKU)
+        <input
+          type="text"
+          name="sku"
+          value="<%= product?.sku || '' %>"
+          placeholder="เช่น P/7486/17"
+        />
+      </label>
+    </div>
+
+    <!-- หมวดหมู่ (ดึงจาก categories ใน app.js เพื่อป้องกันพิมพ์ผิดจาก enum) -->
+    <div class="form-row">
+      <label>
+        หมวดหมู่สินค้า (Category) *
+        <select name="category" required>
+          <% const currentCat = product?.category || 'Chemical Reagent'; %>
+          <% categories.forEach(cat => { %>
+            <option value="<%= cat %>" <%= currentCat === cat ? 'selected' : '' %>>
+              <%= cat %>
+            </option>
+          <% }) %>
+          <option value="ทั่วไป" <%= currentCat === 'ทั่วไป' ? 'selected' : '' %>>ทั่วไป</option>
+        </select>
+      </label>
+
+      <label>
+        จำนวนคงเหลือ (Stock) *
+        <input
+          type="number"
+          min="0"
+          step="1"
+          name="stock"
+          required
+          value="<%= product?.stock ?? 0 %>"
+        />
+      </label>
+    </div>
+
+    <!-- ราคาปกติ และ ราคาลดพิเศษ (เว้นว่างได้สำหรับสินค้าขอใบเสนอราคา) -->
+    <div class="form-row">
+      <label>
+        ราคาปกติ (บาท)
+        <input
+          type="number"
+          min="0"
+          step="0.01"
+          name="price"
+          value="<%= product?.price ?? '' %>"
+          placeholder="เว้นว่างไว้หากต้องขอใบเสนอราคา"
+        />
+      </label>
+
+      <label>
+        ราคาลดพิเศษ / Sale Price (บาท)
+        <input
+          type="number"
+          min="0"
+          step="0.01"
+          name="salePrice"
+          value="<%= product?.salePrice ?? '' %>"
+          placeholder="ระบุเมื่อจัดโปรโมชัน (ระบบขึ้นป้าย Sale! ให้อัตโนมัติ)"
+        />
+      </label>
+    </div>
+
+    <!-- ป้ายกำกับสินค้าใหม่ (New) -->
+    <div class="form-checkbox-row">
+      <% const isNewChecked = product?.isNewProduct === true || product?.isNewProduct === 'on' || product?.isNewProduct === 'true'; %>
+      <label class="checkbox-label">
+        <input type="checkbox" name="isNewProduct" <%= isNewChecked ? 'checked' : '' %> />
+        <span>แสดงป้ายกำกับ <strong>"New"</strong> (สินค้าเข้าใหม่) บนรูปสินค้า</span>
+      </label>
+    </div>
+
+    <!-- รายละเอียดสินค้า -->
+    <label>
+      รายละเอียดสินค้า / คุณสมบัติทางเทคนิค
+      <textarea
+        name="description"
+        rows="4"
+        maxlength="1000"
+        placeholder="ระบุเกรดสารเคมี ขนาดบรรจุ หรือรายละเอียดเพิ่มเติม..."
+      ><%= product?.description || '' %></textarea>
+    </label>
+
+    <!-- ลิงก์รูปภาพ -->
+    <label>
+      URL รูปภาพสินค้า (หรือ Path ในโฟลเดอร์ public เช่น /images/chem.jpg)
+      <input
+        type="text"
+        name="imageUrl"
+        value="<%= product?.imageUrl || '' %>"
+        placeholder="/images/example-product.jpg"
+      />
+    </label>
+
+    <div class="form-actions">
+      <button type="submit" class="btn-primary">บันทึกข้อมูลสินค้า</button>
+      <a href="/admin" class="btn-secondary">ยกเลิก</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="th">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mini Chemical Shop</title>
+    <!-- ฟอนต์ภาษาไทยอ่านง่าย สะอาดตา เข้ากับธีมเว็บห้องแล็บ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-container">
+        <!-- โลโก้ร้าน -->
+        <a href="/" class="brand-logo">Mini Chemical Shop</a>
+
+        <!-- เมนูหลักตรงกลาง (สไตล์เดียวกับเว็บตัวอย่าง) -->
+        <nav class="main-nav">
+          <a href="/" class="<%= currentPath === '/' ? 'active' : '' %>">
+            สินค้าของเรา
+          </a>
+          <a
+            href="/cart"
+            class="<%= currentPath === '/cart' ? 'active' : '' %>"
+          >
+            รายการขอราคา / ตะกร้า (<%= cartCount %>)
+          </a>
+          <a
+            href="/admin"
+            class="<%= currentPath.startsWith('/admin') ? 'active' : '' %>"
+          >
+            <%= isAdmin ? 'จัดการหลังบ้าน (Admin)' : 'เข้าสู่ระบบ Admin' %>
+          </a>
+        </nav>
+
+        <!-- ช่องค้นหาสารเคมี / รหัส SKU ด่วนบน Header -->
+        <form action="/" method="GET" class="header-search">
+          <input
+            type="text"
+            name="q"
+            placeholder="ค้นหาชื่อสารเคมี, รหัส SKU..."
+            value="<%= typeof q !== 'undefined' ? q : '' %>"
+          />
+          <button type="submit">ค้นหา</button>
+        </form>
+      </div>
+    </header>
+
+    <!-- เปิดแท็ก main ค้างไว้ เพื่อให้หน้า shop/index.ejs หรือ shop/cart.ejs ใส่เนื้อหาข้างใน -->
+    <main class="main-container"></main>
+  </body>
+</html>

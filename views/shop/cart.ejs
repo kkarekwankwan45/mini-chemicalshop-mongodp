@@ -1,0 +1,115 @@
+<%- include('../partials/header') %>
+
+<div class="shop-topbar">
+  <div class="breadcrumb">
+    <a href="/">HOME</a> / <span>CART &amp; QUOTATION</span>
+  </div>
+</div>
+
+<div class="cart-container">
+  <h1><%= hasUnpricedItems ? 'รายการขอใบเสนอราคา / ตะกร้าสินค้า' : 'ตะกร้าสินค้า' %></h1>
+
+  <% if (error) { %>
+    <p class="error-banner"><%= error %></p>
+  <% } %>
+
+  <% if (items.length > 0) { %>
+    <!-- ตารางแสดงรายการสินค้าในตะกร้า -->
+    <div class="cart-items">
+      <% items.forEach(i => { %>
+        <div class="cart-line">
+          <div class="cart-item-info">
+            <span class="item-category"><%= i.product.category %></span>
+            <strong class="item-name"><%= i.product.name %></strong>
+            <% if (i.product.sku) { %>
+              <small class="item-sku">รหัสสินค้า (SKU): <%= i.product.sku %></small>
+            <% } %>
+            <div class="item-qty-price">
+              จำนวน: <strong><%= i.quantity %></strong> ชิ้น
+              <% if (i.unitPrice !== null) { %>
+                (ราคาต่อหน่วย: ฿<%= i.unitPrice.toLocaleString('th-TH', { minimumFractionDigits: 2 }) %>)
+              <% } %>
+            </div>
+          </div>
+
+          <div class="cart-item-actions">
+            <% if (i.subtotal !== null) { %>
+              <strong class="line-total">
+                ฿<%= i.subtotal.toLocaleString('th-TH', { minimumFractionDigits: 2 }) %>
+              </strong>
+            <% } else { %>
+              <span class="quote-badge">รอใบเสนอราคา</span>
+            <% } %>
+
+            <form method="POST" action="/cart/remove/<%= i.product.id %>">
+              <button type="submit" class="btn-danger">ลบ</button>
+            </form>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+
+    <!-- สรุปยอดรวม -->
+    <div class="cart-summary">
+      <h2>
+        ยอดรวมเบื้องต้น: 
+        <span>฿<%= total.toLocaleString('th-TH', { minimumFractionDigits: 2 }) %></span>
+      </h2>
+      <% if (hasUnpricedItems) { %>
+        <p class="quote-notice">
+          * รายการของคุณมีสินค้าที่ต้องประเมินราคา เจ้าหน้าที่จะจัดทำใบเสนอราคาและติดต่อกลับตามข้อมูลด้านล่าง
+        </p>
+      <% } %>
+    </div>
+
+    <!-- ฟอร์มข้อมูลผู้สั่งซื้อ / หน่วยงาน / ห้องปฏิบัติการ -->
+    <div class="checkout-box">
+      <h2><%= hasUnpricedItems ? 'ข้อมูลสำหรับจัดส่งใบเสนอราคา' : 'ยืนยันคำสั่งซื้อ' %></h2>
+      <form method="POST" action="/checkout" class="checkout-form">
+        <div class="form-row">
+          <label>
+            ชื่อผู้ติดต่อ *
+            <input type="text" name="customerName" required maxlength="100" placeholder="เช่น นายสมชาย ใจดี" />
+          </label>
+          <label>
+            เบอร์โทรศัพท์ *
+            <input type="tel" name="phone" required maxlength="30" placeholder="เช่น 081-234-5678" />
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>
+            ชื่อบริษัท / ห้องปฏิบัติการ / สถาบันการศึกษา
+            <input type="text" name="organization" maxlength="150" placeholder="เช่น ห้องปฏิบัติการเคมี มหาวิทยาลัย..." />
+          </label>
+          <label>
+            อีเมล (สำหรับรับใบเสนอราคา / เอกสาร)
+            <input type="email" name="email" maxlength="100" placeholder="name@company.com" />
+          </label>
+        </div>
+
+        <label>
+          ที่อยู่จัดส่งสินค้า / ออกใบกำกับภาษี
+          <textarea name="shippingAddress" rows="2" maxlength="300" placeholder="ระบุที่อยู่จัดส่ง..."></textarea>
+        </label>
+
+        <label>
+          หมายเหตุเพิ่มเติม (เช่น ขอเอกสาร COA / MSDS หรือระบุขนาดบรรจุพิเศษ)
+          <textarea name="note" rows="2" maxlength="300" placeholder="ระบุรายละเอียดเพิ่มเติม (ถ้ามี)..."></textarea>
+        </label>
+
+        <button type="submit" class="btn-submit">
+          <%= hasUnpricedItems ? 'ส่งคำขอใบเสนอราคา' : 'ยืนยันคำสั่งซื้อ' %>
+        </button>
+      </form>
+    </div>
+
+  <% } else { %>
+    <div class="empty-state">
+      <p>ยังไม่มีสินค้าในตะกร้า</p>
+      <a href="/" class="btn-back">เลือกดูรายการสารเคมีและอุปกรณ์</a>
+    </div>
+  <% } %>
+</div>
+
+<%- include('../partials/footer') %>

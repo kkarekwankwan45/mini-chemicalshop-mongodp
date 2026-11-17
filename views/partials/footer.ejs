@@ -1,0 +1,24 @@
+</main>
+
+    <footer class="site-footer">
+      <div class="footer-container">
+        <div class="footer-info">
+          <strong>Mini Chemical Shop</strong>
+          <p>จำหน่ายสารเคมีวิเคราะห์ วัสดุสิ้นเปลือง และอุปกรณ์ห้องปฏิบัติการ</p>
+        </div>
+
+        <div class="footer-links">
+          <% if (typeof categories !== 'undefined' && categories.length > 0) { %>
+            <% categories.forEach(cat => { %>
+              <a href="/?category=<%= encodeURIComponent(cat) %>"><%= cat %></a>
+            <% }) %>
+          <% } %>
+        </div>
+
+        <div class="footer-copy">
+          &copy; <%= new Date().getFullYear() %> Mini Chemical Shop • Node.js &amp; MongoDB
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

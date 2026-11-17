@@ -1,0 +1,120 @@
+<%- include('../partials/header') %>
+
+<div class="shop-topbar">
+  <div class="breadcrumb">
+    <a href="/">HOME</a> / <span>ADMIN DASHBOARD</span>
+  </div>
+  <form method="POST" action="/admin/logout" class="logout-form">
+    <button type="submit" class="btn-outline">ออกจากระบบ (Logout)</button>
+  </form>
+</div>
+
+<div class="admin-container">
+  <div class="admin-header-row">
+    <h1>จัดการรายการสินค้า (Admin)</h1>
+    <div class="admin-nav-actions">
+      <a href="/admin/products/new" class="btn-primary">+ เพิ่มสินค้าใหม่</a>
+      <a href="/admin/orders" class="btn-secondary">ดูคำสั่งซื้อ / ใบขอราคา</a>
+    </div>
+  </div>
+
+  <!-- แถบค้นหาชื่อสารเคมี / SKU และกรองตามหมวดหมู่ -->
+  <form method="GET" action="/admin" class="admin-filter-bar">
+    <input 
+      type="text" 
+      name="q" 
+      value="<%= q %>" 
+      placeholder="ค้นหาชื่อสารเคมี หรือ รหัส SKU..." 
+    />
+
+    <select name="category" onchange="this.form.submit()">
+      <option value="">ทุกหมวดหมู่ (All Categories)</option>
+      <% categories.forEach(cat => { %>
+        <option value="<%= cat %>" <%= selectedCategory === cat ? 'selected' : '' %>>
+          <%= cat %>
+        </option>
+      <% }) %>
+    </select>
+
+    <button type="submit" class="btn-search">ค้นหา</button>
+    <% if (q || selectedCategory) { %>
+      <a href="/admin" class="btn-clear">ล้างตัวกรอง</a>
+    <% } %>
+  </form>
+
+  <!-- ตารางแสดงรายการสินค้า -->
+  <div class="table-responsive">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>รูป</th>
+          <th>ชื่อสินค้า / รหัส SKU</th>
+          <th>หมวดหมู่</th>
+          <th>ป้ายกำกับ</th>
+          <th>ราคาปกติ / โปรโมชัน</th>
+          <th>สต็อก</th>
+          <th>จัดการ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (products.length > 0) { %>
+          <% products.forEach(p => { %>
+            <tr>
+              <td>
+                <img 
+                  src="<%= p.imageUrl || 'https://via.placeholder.com/60x60?text=No+Img' %>" 
+                  alt="<%= p.name %>" 
+                  class="admin-thumb"
+                />
+              </td>
+              <td>
+                <strong><%= p.name %></strong>
+                <% if (p.sku) { %>
+                  <br /><small class="text-muted">SKU: <%= p.sku %></small>
+                <% } %>
+              </td>
+              <td><span class="cat-tag"><%= p.category %></span></td>
+              <td>
+                <% if (p.isOnSale) { %><span class="badge badge-sale">Sale!</span><% } %>
+                <% if (p.isNewProduct) { %><span class="badge badge-new">New</span><% } %>
+                <% if (!p.isOnSale && !p.isNewProduct) { %>-<% } %>
+              </td>
+              <td>
+                <% if (p.isOnSale) { %>
+                  <del class="text-muted">฿<%= p.price.toLocaleString('th-TH', { minimumFractionDigits: 2 }) %></del><br />
+                  <strong class="sale-price">฿<%= p.salePrice.toLocaleString('th-TH', { minimumFractionDigits: 2 }) %></strong>
+                <% } else if (p.price !== null && p.price !== undefined) { %>
+                  ฿<%= p.price.toLocaleString('th-TH', { minimumFractionDigits: 2 }) %>
+                <% } else { %>
+                  <span class="text-muted">ขอใบเสนอราคา</span>
+                <% } %>
+              </td>
+              <td>
+                <span class="<%= p.stock === 0 ? 'out-of-stock' : '' %>">
+                  <%= p.stock %> ชิ้น
+                </span>
+              </td>
+              <td class="action-cell">
+                <a href="/admin/products/<%= p.id %>/edit" class="btn-edit">แก้ไข</a>
+                <form 
+                  method="POST" 
+                  action="/admin/products/<%= p.id %>/delete" 
+                  class="inline-form" 
+                  onsubmit="return confirm('ยืนยันการลบสินค้า <%= p.name %> ?')"
+                >
+                  <button type="submit" class="btn-danger">ลบ</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="7" class="empty-table">ไม่พบรายการสินค้าในระบบ</td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
