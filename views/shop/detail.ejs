@@ -1,0 +1,79 @@
+<%- include('../partials/header') %>
+
+<div class="shop-topbar">
+  <div class="breadcrumb">
+    <a href="/">HOME</a> /
+    <a href="/?category=<%= encodeURIComponent(product.category) %>">
+      <%= product.category.toUpperCase() %>
+    </a> /
+    <strong><%= product.name %></strong>
+  </div>
+</div>
+
+<!-- กล่องรายละเอียดสินค้าแบบ 2 คอลัมน์ (ซ้ายรูปขนาดพอดี / ขวาข้อมูลอ่านง่าย) -->
+<div class="product-detail-card">
+  <!-- ฝั่งซ้าย: กรอบรูปภาพขนาดพอดีสายตา -->
+  <div class="product-detail-media">
+    <div class="badges">
+      <% if (product.isOnSale) { %><span class="badge badge-sale">Sale!</span><% } %>
+      <% if (product.isNewProduct) { %><span class="badge badge-new">New</span><% } %>
+    </div>
+    <img
+      src="<%= product.imageUrl || 'https://via.placeholder.com/450x450?text=Chemical+Product' %>"
+      alt="<%= product.name %>"
+    />
+  </div>
+
+  <!-- ฝั่งขวา: ข้อมูลจำเพาะ ราคา และปุ่มสั่งซื้อ -->
+  <div class="product-detail-info">
+    <span class="detail-category-pill"><%= product.category %></span>
+    <h1 class="detail-title"><%= product.name %></h1>
+
+    <% if (product.sku) { %>
+      <p class="detail-sku">รหัสสินค้า (SKU): <strong><%= product.sku %></strong></p>
+    <% } %>
+
+    <div class="detail-price-box">
+      <% if (product.isOnSale) { %>
+        <del class="old-price">฿<%= product.price.toLocaleString('th-TH', { minimumFractionDigits: 2 }) %></del>
+        <strong class="sale-price">฿<%= product.salePrice.toLocaleString('th-TH', { minimumFractionDigits: 2 }) %></strong>
+      <% } else if (product.price !== null && product.price !== undefined) { %>
+        <strong>฿<%= product.price.toLocaleString('th-TH', { minimumFractionDigits: 2 }) %></strong>
+      <% } else { %>
+        <span class="no-price">ติดต่อสอบถาม / ขอใบเสนอราคา</span>
+      <% } %>
+    </div>
+
+    <div class="detail-description">
+      <h3>รายละเอียดสินค้า</h3>
+      <p><%= product.description || 'ไม่มีรายละเอียดเพิ่มเติม' %></p>
+    </div>
+
+    <div class="detail-stock">
+      สถานะสินค้า:
+      <% if (product.stock > 0) { %>
+        <span class="in-stock">พร้อมส่ง (คงเหลือ <%= product.stock %> ชิ้น)</span>
+      <% } else { %>
+        <span class="out-of-stock">สินค้าหมดชั่วคราว</span>
+      <% } %>
+    </div>
+
+    <% if (product.stock > 0) { %>
+      <form method="POST" action="/cart/add/<%= product.id %>" class="detail-add-form">
+        <label class="qty-label">
+          จำนวน:
+          <input type="number" name="quantity" value="1" min="1" max="<%= product.stock %>" />
+        </label>
+        <button type="submit" class="btn-primary">
+          <%= product.price === null ? 'เพิ่มลงรายการขอราคา' : 'เพิ่มลงตะกร้าสินค้า' %>
+        </button>
+      </form>
+    <% } %>
+
+    <div class="detail-back-link">
+      <a href="/">&larr; กลับไปหน้ารายการสินค้าทั้งหมด</a>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

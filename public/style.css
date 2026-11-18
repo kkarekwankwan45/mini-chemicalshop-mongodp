@@ -1,33 +1,49 @@
 /* =========================================
-   1. ตัวแปรสี (Lab valley Teal & Clean White Theme)
+   1. ตัวแปรสีและระยะขอบกลาง (ใช้ร่วมกันทุกหน้า)
    ========================================= */
 :root {
-  --teal-primary: #1b9c93;     /* สีเขียวอมฟ้าหลักของ Header และปุ่ม */
-  --teal-hover: #147e77;       /* สีเขียวอมฟ้าเข้มตอนชี้เมาส์ */
-  --teal-light: #e0f5f3;       /* สีเขียวอมฟ้าอ่อนสำหรับป้ายกำกับ */
-  --bg-page: #ffffff;          /* พื้นหลังหลักสีขาว */
-  --bg-section: #eef4f2;       /* พื้นหลังสีเทาอมเขียวอ่อนแบบช่วง "เคมีภัณฑ์" */
+  --bg-page: #ffffff;
+  --bg-subtle: #f4f8f7;
   --surface: #ffffff;
-  --text-main: #1f2937;        /* สีดำเทาเข้มอ่านสบายตา */
-  --text-muted: #6b7280;
+  --black: #111827;
+  --text-main: #1f2937;
+  --text-muted: #52606d;
+  --green-primary: #0d9488;
+  --green-hover: #0f766e;
+  --green-light: #ccfbf1;
+  --green-soft-bg: #f0fdfa;
   --border-color: #e2e8f0;
   --danger: #dc2626;
   --danger-hover: #b91c1c;
+  --container-max: 1180px;
+  /* เว้นระยะขอบซ้าย-ขวาอัตโนมัติ (มือถือ 20px -> แท็บเล็ต 40px -> จอคอม 64px) */
+  --gutter-x: clamp(20px, 5vw, 64px);
 }
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
   font-family: "Noto Sans Thai", Tahoma, Arial, sans-serif;
+  font-size: 16px;
   background-color: var(--bg-page);
   color: var(--text-main);
-  line-height: 1.6;
+  line-height: 1.65;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 a {
@@ -37,25 +53,25 @@ a {
 }
 
 a:hover {
-  color: var(--teal-primary);
+  color: var(--green-primary);
 }
 
 /* =========================================
-   2. Header สีเขียวอมฟ้าเต็มความกว้าง (แบบ Lab valley)
+   2. Header Bar (แถบเมนูด้านบน)
    ========================================= */
 .site-header {
-  background-color: var(--teal-primary);
+  background-color: var(--green-primary);
   color: #ffffff;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
 }
 
 .header-container {
-  max-width: 1240px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 14px 28px;
+  padding: 14px var(--gutter-x);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -63,38 +79,34 @@ a:hover {
   flex-wrap: wrap;
 }
 
-/* โลโก้กรอบสี่เหลี่ยมสไตล์ Lab valley */
 .brand-logo {
-  font-size: 1.45rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #ffffff !important;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
+  padding: 5px 14px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 4px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
 
-.brand-logo::before {
-  content: "LAB";
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 3px 6px;
-  border: 2px solid #ffffff;
-  border-radius: 3px;
-  letter-spacing: 1px;
+.brand-logo:hover {
+  background-color: rgba(255, 255, 255, 0.14);
 }
 
 .main-nav {
   display: flex;
-  gap: 26px;
+  gap: 22px;
   align-items: center;
 }
 
 .main-nav a {
   font-weight: 500;
   font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.9);
-  padding: 6px 4px;
+  color: rgba(255, 255, 255, 0.92);
+  padding: 6px 2px;
   border-bottom: 2px solid transparent;
 }
 
@@ -105,7 +117,6 @@ a:hover {
   font-weight: 600;
 }
 
-/* ช่องค้นหาบน Header โทนโปร่งกลมกลืนกับแถบสีเขียว */
 .header-search {
   display: flex;
   gap: 6px;
@@ -114,96 +125,105 @@ a:hover {
 .header-search input {
   padding: 8px 14px;
   border: 1px solid rgba(255, 255, 255, 0.4);
-  background-color: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  border-radius: 5px;
+  border-radius: 4px;
   font: inherit;
   font-size: 0.9rem;
   width: 220px;
-}
-
-.header-search input::placeholder {
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.header-search input:focus {
-  outline: none;
   background-color: #ffffff;
-  color: var(--text-main);
+  color: var(--black);
 }
 
 .header-search button {
-  background-color: #ffffff;
-  color: var(--teal-primary);
-  font-weight: 600;
+  background-color: var(--black);
+  color: #ffffff;
   border: none;
   padding: 8px 16px;
-  border-radius: 5px;
+  border-radius: 4px;
   font: inherit;
   font-size: 0.9rem;
+  font-weight: 500;
   cursor: pointer;
 }
 
 .header-search button:hover {
-  background-color: var(--teal-light);
+  background-color: #374151;
 }
 
 /* =========================================
-   3. Hero Banner (ส่วนแนะนำร้าน 2 คอลัมน์ แบบในรูป)
+   3. Main Container (คุมระยะขอบซ้าย-ขวาทุกหน้าให้เท่ากัน)
    ========================================= */
-.hero-banner {
+.main-container {
+  max-width: var(--container-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 32px var(--gutter-x) 72px;
+  flex: 1;
+}
+
+/* =========================================
+   4. Hero Banner หน้าแรก (สไตล์ Lab valley: ซ้ายรูป / ขวาข้อความ)
+   ========================================= */
+.lab-hero {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 48px;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 44px;
   align-items: center;
   background-color: #ffffff;
-  padding: 20px 0 44px;
-  margin-bottom: 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 32px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
 }
 
-.hero-image img {
+.lab-hero-media {
   width: 100%;
-  max-height: 360px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.lab-hero-media img {
+  width: 100%;
+  height: 310px;
   object-fit: cover;
-  border-radius: 6px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-.hero-content h1 {
-  font-size: 2rem;
+.lab-hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.lab-hero-content h1 {
+  margin: 0;
+  font-size: 1.85rem;
   font-weight: 700;
-  color: #111827;
-  margin: 0 0 14px;
+  color: var(--black);
 }
 
-.hero-content p {
-  color: var(--text-muted);
+.lab-hero-content p {
+  margin: 0;
   font-size: 0.98rem;
-  margin: 0 0 24px;
+  color: var(--text-muted);
   line-height: 1.75;
 }
 
 /* =========================================
-   4. Main Container & Topbar (Breadcrumb + Sorting)
+   5. Breadcrumb Topbar & Sorting
    ========================================= */
-.main-container {
-  max-width: 1240px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 28px 32px 64px;
-  flex: 1;
-}
-
 .shop-topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--bg-section);
-  border-radius: 6px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
   padding: 14px 22px;
-  margin-bottom: 28px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 14px;
 }
 
 .breadcrumb {
@@ -211,76 +231,77 @@ a:hover {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   color: var(--text-muted);
 }
 
 .breadcrumb a {
-  color: var(--text-main);
+  color: var(--black);
   font-weight: 600;
-  padding: 4px 10px;
+  padding: 4px 12px;
   background-color: #ffffff;
   border: 1px solid var(--border-color);
   border-radius: 4px;
 }
 
 .breadcrumb a:hover {
-  background-color: var(--teal-primary);
-  border-color: var(--teal-primary);
+  background-color: var(--green-primary);
+  border-color: var(--green-primary);
   color: #ffffff;
 }
 
 .breadcrumb strong {
-  color: var(--teal-primary);
-  font-weight: 700;
+  color: var(--green-primary);
+  font-weight: 600;
 }
 
 .shop-controls {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
 
 .result-count {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text-muted);
 }
 
 .sort-form select {
-  padding: 8px 14px;
-  border: 1px solid #d1d5db;
-  border-radius: 5px;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
   background-color: #ffffff;
-  color: var(--text-main);
+  color: var(--black);
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   cursor: pointer;
 }
 
 /* =========================================
-   5. Shop Layout (Sidebar BROWSE + Section สินค้าพื้นหลังสีเทาอมเขียว)
+   6. Shop 2-Column Layout (Sidebar BROWSE + Product Grid)
    ========================================= */
 .shop-layout {
   display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 32px;
+  grid-template-columns: 230px 1fr;
+  gap: 36px;
   align-items: start;
 }
 
 .shop-sidebar {
-  background-color: var(--bg-section);
-  padding: 22px;
+  background-color: var(--bg-subtle);
+  padding: 22px 18px;
   border-radius: 8px;
+  border: 1px solid var(--border-color);
 }
 
 .sidebar-title {
   margin: 0 0 14px;
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 700;
-  color: #111827;
+  color: var(--black);
   letter-spacing: 0.6px;
   padding-bottom: 10px;
-  border-bottom: 2px solid var(--teal-primary);
+  border-bottom: 2px solid var(--green-primary);
 }
 
 .category-list {
@@ -290,7 +311,7 @@ a:hover {
 }
 
 .category-list li {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .category-list li:last-child {
@@ -300,66 +321,38 @@ a:hover {
 .category-list a {
   display: block;
   padding: 10px 6px;
-  font-size: 0.94rem;
-  color: var(--text-main);
+  font-size: 0.93rem;
+  color: var(--text-muted);
 }
 
 .category-list a:hover,
 .category-list a.active {
-  color: var(--teal-primary);
+  color: var(--green-primary);
   font-weight: 600;
   padding-left: 10px;
-}
-
-/* พื้นที่รายการสินค้าโทนพื้นหลังสีเทาอมเขียวอ่อนแบบช่วง "เคมีภัณฑ์" */
-.shop-products {
-  background-color: var(--bg-section);
-  padding: 28px;
-  border-radius: 8px;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 24px;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.section-header h2 {
-  margin: 0 0 8px;
-  font-size: 1.6rem;
-  color: #111827;
-}
-
-.section-header p {
-  margin: 0;
-  color: var(--text-muted);
-  font-size: 0.92rem;
-  max-width: 680px;
 }
 
 /* ตารางสินค้า 3 คอลัมน์ */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
+  gap: 24px;
 }
 
 .product-card {
-  background-color: #ffffff;
+  background-color: var(--surface);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .product-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(27, 156, 147, 0.12);
+  border-color: var(--green-primary);
+  box-shadow: 0 12px 24px rgba(13, 148, 136, 0.1);
 }
 
 .product-image-wrap {
@@ -367,7 +360,7 @@ a:hover {
   width: 100%;
   aspect-ratio: 1 / 1;
   background-color: #ffffff;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -380,7 +373,6 @@ a:hover {
   object-fit: contain;
 }
 
-/* ป้ายวงกลม Sale! และ New */
 .badges {
   position: absolute;
   top: 12px;
@@ -398,18 +390,18 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  font-size: 0.74rem;
   font-weight: 700;
   color: #ffffff;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .badge-sale {
-  background-color: var(--teal-primary);
+  background-color: var(--green-primary);
 }
 
 .badge-new {
-  background-color: #f59e0b;
+  background-color: var(--black);
 }
 
 .product-info {
@@ -421,17 +413,17 @@ a:hover {
 }
 
 .product-category {
-  font-size: 0.72rem;
-  color: var(--teal-primary);
+  font-size: 0.74rem;
+  color: var(--green-primary);
   font-weight: 600;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
   margin-bottom: 6px;
 }
 
 .product-title {
-  font-size: 0.95rem;
+  font-size: 0.96rem;
   font-weight: 600;
-  color: #111827;
+  color: var(--black);
   margin: 0 0 10px;
   line-height: 1.45;
 }
@@ -449,22 +441,22 @@ a:hover {
 }
 
 .sale-price {
-  color: var(--teal-primary);
+  color: var(--green-primary);
 }
 
 .no-price {
-  font-size: 0.85rem;
-  color: var(--teal-primary);
+  font-size: 0.86rem;
+  color: var(--green-primary);
   font-weight: 500;
 }
 
 .add-cart-form button {
   width: 100%;
-  background-color: var(--teal-primary);
+  background-color: var(--green-primary);
   color: #ffffff;
   border: none;
-  padding: 10px 16px;
-  border-radius: 5px;
+  padding: 10px 14px;
+  border-radius: 4px;
   font: inherit;
   font-size: 0.9rem;
   font-weight: 500;
@@ -472,17 +464,141 @@ a:hover {
 }
 
 .add-cart-form button:hover:not(:disabled) {
-  background-color: var(--teal-hover);
+  background-color: var(--black);
 }
 
 .add-cart-form button:disabled {
-  background-color: #cbd5e1;
-  color: #64748b;
+  background-color: #d1d5db;
+  color: #6b7280;
   cursor: not-allowed;
 }
 
 /* =========================================
-   6. Buttons, Forms & Alerts (ใช้ร่วมกันทุกหน้า)
+   7. หน้ารายละเอียดสินค้า (Product Detail)
+   ========================================= */
+.product-detail-card {
+  display: grid;
+  grid-template-columns: minmax(280px, 420px) 1fr;
+  gap: 44px;
+  background-color: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 36px;
+  align-items: start;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.product-detail-media {
+  position: relative;
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 320px;
+}
+
+.product-detail-media img {
+  width: 100%;
+  max-width: 350px;
+  max-height: 350px;
+  object-fit: contain;
+}
+
+.product-detail-info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.detail-category-pill {
+  display: inline-block;
+  align-self: flex-start;
+  background-color: var(--green-soft-bg);
+  color: var(--green-primary);
+  border: 1px solid var(--green-light);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.detail-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--black);
+  line-height: 1.35;
+}
+
+.detail-sku {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.detail-price-box {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--green-primary);
+  padding: 12px 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.detail-description {
+  background-color: var(--bg-subtle);
+  padding: 18px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.detail-description h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  color: var(--black);
+}
+
+.detail-description p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  line-height: 1.75;
+  white-space: pre-line;
+}
+
+.detail-stock {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.in-stock {
+  color: var(--green-primary);
+  font-weight: 600;
+}
+
+.detail-add-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.qty-label {
+  width: 110px;
+}
+
+.detail-back-link {
+  margin-top: 10px;
+  font-size: 0.92rem;
+}
+
+/* =========================================
+   8. Buttons, Forms & Alerts
    ========================================= */
 button,
 .btn-primary,
@@ -510,46 +626,46 @@ button,
 .btn-primary,
 .btn-submit,
 .btn-search {
-  background-color: var(--teal-primary);
+  background-color: var(--green-primary);
   color: #ffffff;
 }
 
 .btn-primary:hover,
 .btn-submit:hover,
 .btn-search:hover {
-  background-color: var(--teal-hover);
+  background-color: var(--green-hover);
   color: #ffffff;
 }
 
 .btn-secondary,
 .btn-back {
-  background-color: #1f2937;
+  background-color: var(--black);
   color: #ffffff;
 }
 
 .btn-secondary:hover,
 .btn-back:hover {
-  background-color: #111827;
+  background-color: #374151;
   color: #ffffff;
 }
 
 .btn-outline,
 .btn-edit {
   background-color: #ffffff;
-  color: var(--teal-primary);
-  border-color: var(--teal-primary);
+  color: var(--black);
+  border-color: var(--black);
 }
 
 .btn-outline:hover,
 .btn-edit:hover {
-  background-color: var(--teal-primary);
+  background-color: var(--black);
   color: #ffffff;
 }
 
 .btn-danger {
   background-color: var(--danger);
   color: #ffffff;
-  padding: 6px 12px;
+  padding: 6px 14px;
   font-size: 0.85rem;
 }
 
@@ -558,9 +674,8 @@ button,
 }
 
 .btn-clear {
-  background-color: #ffffff;
+  background-color: #f3f4f6;
   color: var(--text-muted);
-  border-color: var(--border-color);
 }
 
 input[type="text"],
@@ -571,21 +686,21 @@ input[type="number"],
 textarea,
 select {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
+  padding: 10px 14px;
+  border: 1px solid #cbd5e1;
   border-radius: 5px;
   font: inherit;
   font-size: 0.95rem;
   background-color: #ffffff;
-  color: var(--text-main);
+  color: var(--black);
 }
 
 input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: var(--teal-primary);
-  box-shadow: 0 0 0 3px rgba(27, 156, 147, 0.15);
+  border-color: var(--green-primary);
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.14);
 }
 
 label {
@@ -594,12 +709,12 @@ label {
   gap: 6px;
   font-size: 0.92rem;
   font-weight: 500;
-  color: var(--text-main);
+  color: var(--black);
 }
 
 .form-row {
   display: flex;
-  gap: 16px;
+  gap: 18px;
 }
 
 .form-row > label {
@@ -625,24 +740,30 @@ label {
 }
 
 /* =========================================
-   7. Cart, Checkout & Order Success
+   9. Cart, Checkout & Order Success (เว้นขอบสมดุล)
    ========================================= */
 .cart-container,
 .success-container,
 .admin-form-container {
-  max-width: 840px;
+  max-width: 860px;
   margin: 0 auto;
+  width: 100%;
+}
+
+.cart-container h1 {
+  margin-top: 0;
+  font-size: 1.55rem;
 }
 
 .cart-line {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
-  background-color: #ffffff;
+  padding: 18px 22px;
+  background-color: var(--surface);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
-  margin-bottom: 12px;
+  border-radius: 8px;
+  margin-bottom: 14px;
   gap: 16px;
 }
 
@@ -654,7 +775,7 @@ label {
 
 .item-category {
   font-size: 0.75rem;
-  color: var(--teal-primary);
+  color: var(--green-primary);
   font-weight: 600;
   text-transform: uppercase;
 }
@@ -666,8 +787,8 @@ label {
 }
 
 .quote-badge {
-  background-color: var(--teal-light);
-  color: var(--teal-primary);
+  background-color: var(--green-light);
+  color: var(--green-primary);
   padding: 4px 12px;
   border-radius: 20px;
   font-size: 0.8rem;
@@ -675,10 +796,11 @@ label {
 }
 
 .cart-summary {
-  background-color: var(--bg-section);
-  padding: 20px 24px;
-  border-radius: 6px;
-  margin: 20px 0 28px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  padding: 22px 24px;
+  border-radius: 8px;
+  margin: 22px 0 30px;
   text-align: right;
 }
 
@@ -688,7 +810,7 @@ label {
 }
 
 .cart-summary span {
-  color: var(--teal-primary);
+  color: var(--green-primary);
 }
 
 .quote-notice {
@@ -701,11 +823,10 @@ label {
 .success-card,
 .auth-card,
 .admin-product-form {
-  background-color: #ffffff;
+  background-color: var(--surface);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 28px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  border-radius: 10px;
+  padding: 32px;
 }
 
 .checkout-form,
@@ -713,7 +834,7 @@ label {
 .admin-product-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
 }
 
 .auth-container {
@@ -723,26 +844,26 @@ label {
 
 .auth-card h1 {
   margin: 0 0 6px;
-  font-size: 1.4rem;
+  font-size: 1.45rem;
 }
 
 .auth-subtitle {
-  margin: 0 0 20px;
+  margin: 0 0 22px;
   font-size: 0.88rem;
   color: var(--text-muted);
 }
 
 .auth-footer {
-  margin-top: 18px;
+  margin-top: 20px;
   text-align: center;
   font-size: 0.9rem;
 }
 
 .order-ref-box {
-  background-color: var(--bg-section);
-  border-left: 4px solid var(--teal-primary);
-  padding: 14px 18px;
-  border-radius: 6px;
+  background-color: var(--bg-subtle);
+  border: 1px dashed var(--green-primary);
+  padding: 16px 20px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -773,22 +894,31 @@ label {
 }
 
 .total-amount {
-  color: var(--teal-primary);
+  color: var(--green-primary);
 }
 
 .success-actions {
-  margin-top: 24px;
+  margin-top: 26px;
   text-align: center;
 }
 
 /* =========================================
-   8. Admin Dashboard, Tables & Orders
+   10. Admin Dashboard, Tables & Orders (ใส่กล่องมีขอบมน ไม่ติดริมจอ)
    ========================================= */
+.admin-container {
+  width: 100%;
+  background-color: var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
 .admin-header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
   gap: 12px;
 }
@@ -801,12 +931,13 @@ label {
 .admin-nav-actions {
   display: flex;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .admin-filter-bar {
   display: flex;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   flex-wrap: wrap;
 }
 
@@ -815,13 +946,13 @@ label {
 }
 
 .admin-filter-bar select {
-  max-width: 220px;
+  max-width: 230px;
 }
 
 .table-responsive {
   overflow-x: auto;
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: 8px;
 }
 
 .admin-table {
@@ -831,24 +962,25 @@ label {
 }
 
 .admin-table th {
-  background-color: var(--teal-primary);
+  background-color: var(--black);
   color: #ffffff;
   font-weight: 500;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   text-align: left;
-  padding: 14px;
+  padding: 14px 16px;
+  white-space: nowrap;
 }
 
 .admin-table td {
-  padding: 12px 14px;
+  padding: 14px 16px;
   border-bottom: 1px solid var(--border-color);
   font-size: 0.92rem;
   vertical-align: middle;
 }
 
 .admin-thumb {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   object-fit: contain;
   border: 1px solid var(--border-color);
   border-radius: 4px;
@@ -856,12 +988,12 @@ label {
 }
 
 .cat-tag {
-  background-color: var(--bg-section);
-  color: var(--teal-hover);
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border-color);
   padding: 4px 10px;
   border-radius: 4px;
   font-size: 0.8rem;
-  font-weight: 500;
+  white-space: nowrap;
 }
 
 .out-of-stock {
@@ -888,31 +1020,35 @@ label {
 .checkbox-label input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: var(--teal-primary);
+  accent-color: var(--green-primary);
 }
 
-/* Admin Orders */
 .orders-grid {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 20px;
 }
 
 .order-card {
   background-color: #ffffff;
   border: 1px solid var(--border-color);
-  border-left: 4px solid var(--teal-primary);
-  border-radius: 6px;
-  padding: 20px;
+  border-left: 4px solid var(--black);
+  border-radius: 8px;
+  padding: 22px 24px;
+}
+
+.order-card.order-quote {
+  border-left-color: var(--green-primary);
 }
 
 .order-card-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding-bottom: 12px;
+  padding-bottom: 14px;
   border-bottom: 1px solid var(--border-color);
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  gap: 10px;
 }
 
 .status-badge {
@@ -921,19 +1057,20 @@ label {
   font-size: 0.8rem;
   font-weight: 600;
   background-color: #f3f4f6;
-  color: var(--text-main);
+  color: var(--black);
+  white-space: nowrap;
 }
 
 .status-quote_requested,
 .badge-quote {
-  background-color: var(--teal-light);
-  color: var(--teal-primary);
+  background-color: var(--green-light);
+  color: var(--green-primary);
 }
 
 .status-confirmed,
 .status-shipped,
 .status-completed {
-  background-color: var(--teal-primary);
+  background-color: var(--black);
   color: #ffffff;
 }
 
@@ -950,8 +1087,8 @@ label {
 .order-item-list {
   list-style: none;
   padding: 12px 16px;
-  margin: 12px 0;
-  background-color: var(--bg-section);
+  margin: 14px 0;
+  background-color: var(--bg-subtle);
   border-radius: 6px;
 }
 
@@ -960,13 +1097,14 @@ label {
   justify-content: space-between;
   padding: 6px 0;
   font-size: 0.92rem;
+  gap: 12px;
 }
 
 .order-card-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 12px;
+  padding-top: 14px;
   border-top: 1px solid var(--border-color);
   flex-wrap: wrap;
   gap: 12px;
@@ -976,6 +1114,7 @@ label {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .status-update-form label {
@@ -987,13 +1126,14 @@ label {
 
 .status-update-form select {
   width: auto;
-  padding: 6px 10px;
+  padding: 6px 12px;
 }
 
 .empty-state {
   text-align: center;
-  padding: 48px 20px;
-  background-color: var(--bg-section);
+  padding: 52px 24px;
+  background-color: var(--bg-subtle);
+  border: 1px dashed #cbd5e1;
   border-radius: 8px;
 }
 
@@ -1002,23 +1142,23 @@ label {
 }
 
 /* =========================================
-   9. Footer (โทนสีเขียวอมฟ้าเข้มตัดกับตัวอักษรขาว)
+   11. Footer
    ========================================= */
 .site-footer {
-  background-color: #134e4a;
-  color: #e6fffa;
-  padding: 40px 24px;
+  background-color: var(--black);
+  color: #e5e7eb;
+  padding: 42px var(--gutter-x);
   margin-top: auto;
 }
 
 .footer-container {
-  max-width: 1240px;
+  max-width: var(--container-max);
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 16px;
+  gap: 18px;
 }
 
 .footer-info strong {
@@ -1029,7 +1169,7 @@ label {
 .footer-info p {
   margin: 4px 0 0;
   font-size: 0.9rem;
-  color: #99f6e4;
+  color: #9ca3af;
 }
 
 .footer-links {
@@ -1040,60 +1180,183 @@ label {
 }
 
 .footer-links a {
-  color: #ccfbf1;
+  color: #d1d5db;
   font-size: 0.9rem;
 }
 
 .footer-links a:hover {
-  color: #ffffff;
-  text-decoration: underline;
+  color: #2dd4bf;
 }
 
 .footer-copy {
   font-size: 0.82rem;
-  color: #5eead4;
-  border-top: 1px solid rgba(255, 255, 255, 0.15);
-  padding-top: 16px;
+  color: #6b7280;
+  border-top: 1px solid #374151;
+  padding-top: 18px;
   width: 100%;
 }
 
 /* =========================================
-   10. Responsive (มือถือและแท็บเล็ต)
+   12. Responsive (แท็บเล็ตและโทรศัพท์มือถือ)
    ========================================= */
-@media (max-width: 900px) {
-  .hero-banner,
+@media (max-width: 960px) {
+  .lab-hero {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .lab-hero-media img {
+    height: 240px;
+  }
+
   .shop-layout {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
 
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .product-detail-card {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .product-detail-media {
+    min-height: 240px;
+  }
+
+  .product-detail-media img {
+    max-width: 280px;
+    max-height: 280px;
+  }
+
+  .admin-container {
+    padding: 22px;
   }
 }
 
 @media (max-width: 600px) {
+  body {
+    font-size: 15px;
+  }
+
   .header-container {
     flex-direction: column;
     align-items: stretch;
+    gap: 12px;
   }
 
   .main-nav {
     justify-content: space-between;
-    gap: 10px;
+    gap: 8px;
+    font-size: 0.88rem;
   }
 
   .header-search input {
     width: 100%;
   }
 
+  .lab-hero-content h1 {
+    font-size: 1.45rem;
+  }
+
   .product-grid {
     grid-template-columns: 1fr;
   }
 
+  .detail-title {
+    font-size: 1.25rem;
+  }
+
   .form-row,
   .cart-line,
-  .order-card-footer {
+  .order-card-footer,
+  .detail-add-form,
+  .admin-filter-bar {
     flex-direction: column;
     align-items: stretch;
   }
+
+  .admin-filter-bar input,
+  .admin-filter-bar select,
+  .qty-label {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .checkout-box,
+  .success-card,
+  .auth-card,
+  .admin-product-form,
+  .admin-container {
+    padding: 18px;
+  }
+  /* =========================================
+   เพิ่มเติม: เว้นระยะขอบซ้าย-ขวาหน้าร้านและจัดระเบียบการ์ดสินค้า
+   ========================================= */
+.shop-page-wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 8px clamp(16px, 4vw, 48px) 24px;
+}
+
+.hero-tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--green-primary);
+  background-color: var(--green-soft-bg);
+  border: 1px solid var(--green-light);
+  padding: 4px 12px;
+  border-radius: 20px;
+}
+
+/* คุมระยะห่างของแถบซ้าย (BROWSE) และตารางสินค้าไม่ให้ชิดขอบจอ */
+.shop-layout {
+  gap: 32px;
+  padding: 4px 0;
+}
+
+.product-grid {
+  gap: 24px;
+}
+
+/* ทำให้ลิงก์รูปภาพใน Card จัดกึ่งกลางเหมือนเดิม */
+a.product-image-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #ffffff;
+}
+
+/* คุมชื่อสินค้าไม่ให้ยาวเกิน 2 บรรทัดจนการ์ดสูงไม่เท่ากัน */
+.product-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.8em;
+}
+
+.product-title a {
+  color: var(--black);
+}
+
+.product-title a:hover {
+  color: var(--green-primary);
+}
+
+@media (max-width: 600px) {
+  .shop-page-wrap {
+    padding: 0 12px 16px;
+  }
+}
+  
 }

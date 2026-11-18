@@ -13,6 +13,26 @@ router.get("/", async (req, res) => {
 
   const filter = {};
 
+  // หน้าดูรายละเอียดสินค้าทีละชิ้น
+  router.get("/products/:id", async (req, res) => {
+    if (!mongoose.isValidObjectId(req.params.id)) {
+      return res.status(404).send("ไม่พบสินค้าที่ต้องการ");
+    }
+
+    const product = await Product.findById(req.params.id);
+    if (!product) {
+      return res.status(404).send("ไม่พบสินค้าที่ต้องการ");
+    }
+
+    // ดึงสินค้าแนะนำในหมวดเดียวกันมาแสดงด้านล่าง (ไม่รวมชิ้นปัจจุบัน)
+    const relatedProducts = await Product.find({
+      category: product.category,
+      _id: { $ne: product._id },
+    }).limit(3);
+
+    res.render("shop/detail", { product, relatedProducts });
+  });
+
   // ค้นหาจากชื่อสินค้า หรือ รหัส SKU
   if (q) {
     const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
