@@ -10,15 +10,11 @@ function requireAdmin(req, res, next) {
   next();
 }
 
-// ตรวจสอบและจัดเตรียมข้อมูลสินค้าจากฟอร์ม Admin
 function formProduct(body) {
   const name = String(body.name || "").trim();
   const stock = Number(body.stock);
-
-  // ชื่อสินค้าและจำนวนสต็อกบังคับกรอกเสมอ
   if (!name || !Number.isInteger(stock) || stock < 0) return null;
 
-  // ราคาปกติ: อนุญาตให้เว้นว่างได้ (เป็น null สำหรับสินค้าที่ต้องขอใบเสนอราคา)
   const rawPrice = String(body.price || "").trim();
   let price = null;
   if (rawPrice !== "") {
@@ -26,7 +22,6 @@ function formProduct(body) {
     if (!Number.isFinite(price) || price < 0) return null;
   }
 
-  // ราคาลดพิเศษ (Sale Price): อนุญาตให้เว้นว่างได้ แต่ถ้ากรอกต้องเป็นตัวเลข >= 0
   const rawSalePrice = String(body.salePrice || "").trim();
   let salePrice = null;
   if (rawSalePrice !== "") {
@@ -41,14 +36,12 @@ function formProduct(body) {
     category: String(body.category || "Chemical Reagent").trim(),
     price,
     salePrice,
-    // Checkbox จาก HTML form จะส่งค่ามาเมื่อถูกติ๊กเลือก
     isNewProduct: body.isNewProduct === "on" || body.isNewProduct === "true",
     stock,
     imageUrl: String(body.imageUrl || "").trim(),
   };
 }
 
-// หน้าเข้าสู่ระบบ Admin
 router.get("/login", (req, res) => {
   if (req.session.isAdmin) return res.redirect("/admin");
   res.render("admin/login", { error: null });
@@ -78,7 +71,6 @@ router.post("/logout", requireAdmin, (req, res) => {
   req.session.destroy(() => res.redirect("/"));
 });
 
-// หน้าจัดการรายการสินค้าทั้งหมด (รองรับค้นหาชื่อ, SKU และกรองหมวดหมู่)
 router.get("/", requireAdmin, async (req, res) => {
   const q = String(req.query.q || "")
     .trim()
@@ -101,7 +93,6 @@ router.get("/", requireAdmin, async (req, res) => {
   res.render("admin/index", { products, q, selectedCategory: category });
 });
 
-// ฟอร์มเพิ่มสินค้าใหม่
 router.get("/products/new", requireAdmin, (req, res) => {
   res.render("admin/form", { product: null, error: null });
 });
@@ -118,7 +109,6 @@ router.post("/products", requireAdmin, async (req, res) => {
   res.redirect("/admin");
 });
 
-// ฟอร์มแก้ไขสินค้า
 router.get("/products/:id/edit", requireAdmin, async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) return res.sendStatus(404);
   const product = await Product.findById(req.params.id);
@@ -139,14 +129,12 @@ router.post("/products/:id/edit", requireAdmin, async (req, res) => {
   res.redirect("/admin");
 });
 
-// ลบสินค้า
 router.post("/products/:id/delete", requireAdmin, async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) return res.sendStatus(404);
   await Product.findByIdAndDelete(req.params.id);
   res.redirect("/admin");
 });
 
-// หน้าจัดการรายการคำสั่งซื้อและคำขอใบเสนอราคา
 router.get("/orders", requireAdmin, async (req, res) => {
   const status = String(req.query.status || "").trim();
   const filter = status ? { status } : {};
@@ -154,7 +142,6 @@ router.get("/orders", requireAdmin, async (req, res) => {
   res.render("admin/orders", { orders, selectedStatus: status });
 });
 
-// อัปเดตสถานะคำสั่งซื้อ / ใบเสนอราคา
 router.post("/orders/:id/status", requireAdmin, async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) return res.sendStatus(404);
   const validStatuses = [

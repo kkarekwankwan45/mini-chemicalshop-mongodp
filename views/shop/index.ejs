@@ -1,7 +1,6 @@
 <%- include('../partials/header') %>
 
 <div class="shop-page-wrap">
-  <!-- Hero Banner สไตล์ Lab valley (ซ้ายรูปภาพ / ขวาแนะนำร้าน) -->
   <section class="lab-hero">
     <div class="lab-hero-media">
       <img
@@ -21,7 +20,6 @@
     </div>
   </section>
 
-  <!-- แถบ Breadcrumb & ตัวเลือกเรียงลำดับด้านบน -->
   <div id="catalog" class="shop-topbar">
     <div class="breadcrumb">
       <a href="/">HOME</a> / <span>SHOP</span>
@@ -33,7 +31,6 @@
     <div class="shop-controls">
       <span class="result-count">Showing all <%= products.length %> results</span>
 
-      <!-- ฟอร์มเรียงลำดับ (Default sorting) โดยรักษาค่า q และ category เดิมไว้ -->
       <form method="GET" action="/" class="sort-form">
         <% if (q) { %><input type="hidden" name="q" value="<%= q %>" /><% } %>
         <% if (selectedCategory) { %><input type="hidden" name="category" value="<%= selectedCategory %>" /><% } %>
@@ -48,9 +45,7 @@
     </div>
   </div>
 
-  <!-- โครงสร้าง 2 คอลัมน์: ซ้ายเป็นเมนู BROWSE / ขวาเป็นตารางสินค้า 3 คอลัมน์ -->
   <div class="shop-layout">
-    <!-- แถบด้านซ้าย: BROWSE หมวดหมู่ -->
     <aside class="shop-sidebar">
       <h3 class="sidebar-title">BROWSE</h3>
       <ul class="category-list">
@@ -70,37 +65,28 @@
       </ul>
     </aside>
 
-    <!-- พื้นที่แสดงรายการสินค้า -->
     <section class="shop-products">
       <% if (products.length > 0) { %>
         <div class="product-grid">
           <% products.forEach(p => { %>
             <article class="product-card">
-              <!-- กล่องรูปภาพ (คลิกเพื่อดูรายละเอียดสินค้าได้) -->
               <a href="/products/<%= p.id %>" class="product-image-wrap">
                 <div class="badges">
-                  <% if (p.isOnSale) { %>
-                    <span class="badge badge-sale">Sale!</span>
-                  <% } %>
-                  <% if (p.isNewProduct) { %>
-                    <span class="badge badge-new">New</span>
-                  <% } %>
+                  <% if (p.isOnSale) { %><span class="badge badge-sale">Sale!</span><% } %>
+                  <% if (p.isNewProduct) { %><span class="badge badge-new">New</span><% } %>
                 </div>
-
                 <img
                   src="<%= p.imageUrl || 'https://via.placeholder.com/300x300?text=Chemical+Product' %>"
                   alt="<%= p.name %>"
                 />
               </a>
 
-              <!-- รายละเอียดสินค้า -->
               <div class="product-info">
                 <span class="product-category"><%= p.category.toUpperCase() %></span>
                 <h2 class="product-title">
                   <a href="/products/<%= p.id %>"><%= p.name %></a>
                 </h2>
 
-                <!-- การแสดงผลราคา -->
                 <div class="product-price">
                   <% if (p.isOnSale) { %>
                     <del class="old-price">฿<%= p.price.toLocaleString('th-TH', { minimumFractionDigits: 2 }) %></del>
@@ -112,7 +98,6 @@
                   <% } %>
                 </div>
 
-                <!-- ปุ่มเพิ่มลงตะกร้า หรือ ขอใบเสนอราคา -->
                 <form method="POST" action="/cart/add/<%= p.id %>" class="add-cart-form">
                   <button type="submit" <%= p.stock === 0 ? 'disabled' : '' %>>
                     <% if (p.stock === 0) { %>

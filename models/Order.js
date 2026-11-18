@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
-    // สร้างเลขที่คำสั่งซื้ออัตโนมัติผ่าน default function (รองรับ Mongoose v9+ โดยไม่ติดปัญหา next)
     orderNumber: {
       type: String,
       unique: true,
@@ -16,37 +15,12 @@ const orderSchema = new mongoose.Schema(
         return `ORD-${datePart}-${randomPart}`;
       },
     },
-    customerName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    organization: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-    email: {
-      type: String,
-      trim: true,
-      lowercase: true,
-      default: "",
-    },
-    phone: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    shippingAddress: {
-      type: String,
-      trim: true,
-      default: "",
-    },
-    note: {
-      type: String,
-      trim: true,
-      default: "",
-    },
+    customerName: { type: String, required: true, trim: true },
+    organization: { type: String, trim: true, default: "" },
+    email: { type: String, trim: true, lowercase: true, default: "" },
+    phone: { type: String, required: true, trim: true },
+    shippingAddress: { type: String, trim: true, default: "" },
+    note: { type: String, trim: true, default: "" },
     items: [
       {
         product: {
@@ -60,11 +34,7 @@ const orderSchema = new mongoose.Schema(
         unitPrice: { type: Number, min: 0, default: null },
       },
     ],
-    total: {
-      type: Number,
-      min: 0,
-      default: 0,
-    },
+    total: { type: Number, min: 0, default: 0 },
     status: {
       type: String,
       enum: [
